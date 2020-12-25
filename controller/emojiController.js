@@ -8,18 +8,18 @@ export const getEmoji = async (req, res) => {
         const emoji = await Axios.get(
             `https://emojipedia.org/search/?q=${text}`
         ).then((res) => res.data);
+
         const $ = cheerio.load(emoji);
         const $bodyList = $("ol.search-results").children("li");
-        console.log($bodyList);
         $bodyList.each(function (i) {
             list[i] = {
                 emoji:
-                    $(this).find("a span").html().includes("&") &&
+                    $(this).find("a span").html()?.includes("&") &&
                     $(this).find("a span").text(),
+
                 id: i++,
             };
         });
-        console.log(list);
         res.status(200).json(list);
     } catch (err) {
         console.log(err);
